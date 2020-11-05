@@ -1,0 +1,5 @@
+FROM alpine:3.6
+#RUN /bin/sh
+RUN apk -U add nginx && touch /var/www/index.html
+ENTRYPOINT nginx
+EXPOSE 80 443
