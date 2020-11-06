@@ -3,13 +3,12 @@ kind: Service
 metadata:
   name: wordpress
   labels:
-    app: wordpress
+    app: wordpress-op
 spec:
   ports:
     - port: 80
   selector:
-    app: wordpress
-    tier: frontend
+    app: wordpress-op
   type: LoadBalancer
 ---
 apiVersion: v1
@@ -17,7 +16,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: wp-pv-claim
   labels:
-    app: wordpress
+    app: wordpress-op
 spec:
   accessModes:
     - ReadWriteOnce
@@ -30,30 +29,28 @@ kind: Deployment
 metadata:
   name: wordpress
   labels:
-    app: wordpress
+    app: wordpress-op
 spec:
   selector:
     matchLabels:
-      app: wordpress
-      tier: frontend
+      app: wordpress-op
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: wordpress
-        tier: frontend
+        app: wordpress-op
     spec:
       containers:
-      - image: wordpress:4.8-apache
+      - image: wordpress:latest
         name: wordpress
         env:
         - name: WORDPRESS_DB_HOST
-          value: wordpress-mysql
+          value: mysql-service
         - name: WORDPRESS_DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mysql-pass-c57bb4t7mf
+              name: mysql-secret
               key: password
         ports:
         - containerPort: 80
