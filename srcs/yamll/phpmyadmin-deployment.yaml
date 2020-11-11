@@ -4,9 +4,12 @@ metadata:
   name: phpmyadmin
   labels:
     app: phpmyadmin
+  annotations:
+    metallb.universe.tf/allow-shared-ip: metallb
 spec:
   ports:
-    - port: 80
+    - port: 5000
+      targetPort: 80
   selector:
     app: phpmyadmin
   type: LoadBalancer

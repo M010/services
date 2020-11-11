@@ -3,12 +3,15 @@ kind: Service
 metadata:
   name: wordpress
   labels:
-    app: wordpress-op
+    app: wordpress
+  annotations:
+    metallb.universe.tf/allow-shared-ip: metallb
 spec:
   ports:
-    - port: 80
+    - port: 5050 
+      targetPort: 80
   selector:
-    app: wordpress-op
+    app: wordpress
   type: LoadBalancer
 ---
 apiVersion: v1
@@ -16,7 +19,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: wp-pv-claim
   labels:
-    app: wordpress-op
+    app: wordpress
 spec:
   accessModes:
     - ReadWriteOnce
@@ -24,22 +27,22 @@ spec:
     requests:
       storage: 20Gi
 ---
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: wordpress
   labels:
-    app: wordpress-op
+    app: wordpress
 spec:
   selector:
     matchLabels:
-      app: wordpress-op
+      app: wordpress
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: wordpress-op
+        app: wordpress
     spec:
       containers:
       - image: wordpress:latest

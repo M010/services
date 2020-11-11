@@ -1,0 +1,32 @@
+server {
+	listen 80;
+	listen [::]:80;
+	server_name the_site;
+	return 301 https://$host$request_uri;
+}
+
+server{
+	listen 443 ssl ;
+	listen [::]:443 ssl ;
+
+	server_name the_site;
+
+	ssl_certificate /etc/nginx/ssl/the_site.pem;
+	ssl_certificate_key /etc/nginx/ssl/the_site.key;
+
+	root /var/www/nginx;
+	index hello.html;
+
+	location /wordpress {
+		return 307 http://$host:5050;
+	}
+
+	location /myadmin {
+		return 307 http://$host:5000;
+	}
+
+	index hello.html;
+	location /  {
+		root 	/var/www/nginx;
+	}
+}
