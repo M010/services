@@ -4,14 +4,11 @@ metadata:
   name: influx-svc
   labels:
     app: influx
-  annotations:
-    metallb.universe.tf/allow-shared-ip: metallb
 spec:
   ports:
     - name: iiin
       protocol: TCP
       port: 8086 
-  type: LoadBalancer
   selector:
     app: influx 
 ---
@@ -35,4 +32,5 @@ spec:
       - name: influx
         image: my_influx
         imagePullPolicy: Never
+        ports:
           - containerPort: 8086 
