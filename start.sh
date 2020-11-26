@@ -8,9 +8,17 @@ minikube start --vm-driver=virtualbox
 cd srcs
 eval $(minikube docker-env)
 minikube addons enable metallb
-alias klaf="kubectl apply -f"
+DIRS="FTPS nginx grafana"
 kubectl apply -f ./yamll/metallb-config.yaml
 kubectl apply -f yamll
-docker build ./Nginx -t my_nginx
-kubectl apply -f  ./Nginx/nginx-deployment.yaml
+for var in $DIRS
+do
+	docker build ./$var -t my_$var
+	kubectl apply -f  ./$var
+done
+#docker build ./FTPS -t my_ftps
+#kubectl apply -f  ./FTPS
+#
+#docker build ./grafana -t my_ftps
+#kubectl apply -f  ./grafana
 fi
