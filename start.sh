@@ -5,20 +5,20 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 minikube delete
 minikube start --vm-driver=virtualbox
+
 cd srcs
 eval $(minikube docker-env)
 minikube addons enable metallb
-DIRS="FTPS nginx grafana"
+
 kubectl apply -f ./yamll/metallb-config.yaml
 kubectl apply -f yamll
-for var in $DIRS
+
+DIRS="ftps nginx grafana influxdb"
+
+for dir in $DIRS
 do
-	docker build ./$var -t my_$var
-	kubectl apply -f  ./$var
+	docker build ./$dir -t my_$dir
+	kubectl apply -f  ./$dir
 done
-#docker build ./FTPS -t my_ftps
-#kubectl apply -f  ./FTPS
-#
-#docker build ./grafana -t my_ftps
-#kubectl apply -f  ./grafana
+
 fi

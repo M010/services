@@ -8,6 +8,8 @@ WORKDIR 	/test
 RUN			wget https://dl.grafana.com/oss/release/grafana-6.7.2.linux-amd64.tar.gz
 RUN			tar -zxvf grafana-6.7.2.linux-amd64.tar.gz
 RUN			apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main libc6-compat
-WORKDIR 	/test/grafana-6.7.2.linux-amd64
-CMD			nginx -g "daemon off;"	
+WORKDIR 	/test/grafana-6.7.2
+#CMD			nginx -g "daemon off;"	
+CMD ./bin/grafana-server
+#grafana
 EXPOSE 		80 443 8086
