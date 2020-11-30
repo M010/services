@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: influx-cm
+stringData:
+  INFLUXDB_ADMIN_USER: my_admin
+  INFLUXDB_ADMIN_PASSWORD: my_admin
+  INFLUXDB_DB: telegraf
+  INFLUXDB_USER: telegraf
+  INFLUXDB_PASSWORD: qwerty
+type: Opaque
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: influxdb-svc
+  labels:
+    app: influxdb
+spec:
+  ports:
+    - name: standard
+      protocol: TCP
+      port: 8086 
+  selector:
+    app: influxdb
+---
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: influxdb-depl
+  labels:
+    app: influxdb
+spec:
+  replicas: 1
+  selector:
+     matchLabels:
+       app: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+      - name: influxdb
+        image: my_influxdb
+        imagePullPolicy: Never
+        envFrom:
+            - secretRef:
+                name: influx-cm
+        volumeMounts:
+            - name: docker-socket
+              mountPath: /var/run/docker.sock
+        ports:
+          - containerPort: 8086
+      volumes:
+      - name: docker-socket
+        hostPath:
+            path: /var/run/docker.sock
+            type: Socket 
