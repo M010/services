@@ -13,7 +13,7 @@ minikube addons enable metallb
 kubectl apply -f ./yamll/metallb-config.yaml
 kubectl apply -f yamll
 
-DIRS="ftps nginx grafana influxdb"
+DIRS="ftps nginx influxdb telegraf grafana"
 
 for dir in $DIRS
 do
