@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: cluster-ip 
-data:
-  ip: 192.168.99.107
