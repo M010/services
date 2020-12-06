@@ -13,12 +13,13 @@ minikube addons enable metallb
 kubectl apply -f ./yamll/metallb-config.yaml
 kubectl apply -f yamll
 
-DIRS="ftps nginx influxdb telegraf grafana"
+DIRS="nginx phpmyadmin" #ftps influxdb telegraf grafana"
 
 for dir in $DIRS
 do
 	docker build ./$dir -t my_$dir
 	kubectl apply -f  ./$dir
+        echo -e "\e[32 $dir configured\e[0m"
 done
 
 fi

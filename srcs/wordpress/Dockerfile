@@ -12,9 +12,11 @@ RUN				apk add  --no-cache nginx openrc supervisor         \
                                     php7-mbstring php7-json         \ 
                                     php7-session
 
+RUN             chown -R nginx /var/www/*
+RUN             chmod -R 755 /var/www/*
 RUN             wget                    https://wordpress.org/latest.tar.gz
 RUN             tar -xzf                latest.tar.gz
-RUN             mv wordpress 			$WORD_DIR
+RUN             mv wordpress/* 			$WORD_DIR/.
 COPY            ./srcs/wp-config.php    $WORD_DIR/.
 COPY            ./srcs/nginx_conf   	/etc/nginx/conf.d/default.conf
 
