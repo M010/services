@@ -1,14 +1,17 @@
 FROM 		alpine:latest
 RUN 		apk update
-RUN 		apk add --no-cache nginx openrc openssl
-RUN 		openrc default
-RUN 		echo "daemon off;" >> /etc/nginx/nginx.conf
+RUN 		apk add --no-cache nginx openrc openssl openssh 
 
 
 ARG 		SITE=nginx
-ARG			SITE_DIR=/var/www/$SITE
+ARG		SITE_DIR=/var/www/$SITE
 RUN 		mkdir -p $SITE_DIR 
+RUN             mkdir -p        /run/nginx/
+RUN                     echo -e "123\n123\n" | adduser user_ssh
+
+
 COPY 		./srcs/hello.html		/var/www/nginx/hello.html
+
 #GET SSL
 RUN		mkdir /etc/nginx/ssl
 RUN		openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
@@ -17,9 +20,8 @@ RUN		openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
 
 #nginx.config
 COPY		./srcs/nginx_conf /etc/nginx/conf.d/$SITE.conf
-RUN			rm -rf /etc/nginx/conf.d/default*
+RUN		rm -rf /etc/nginx/conf.d/default*
+COPY            ./srcs/start.sh . 
 
-#RUN rc-update add nginx default
-CMD			service nginx start
-#CMD			/bin/sh 
-EXPOSE 		80 443
+ENTRYPOINT      ["sh", "/start.sh"]	
+EXPOSE 		80 443 22
