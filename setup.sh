@@ -1,8 +1,11 @@
 #!/bin/bash
-read -p "Are you sure? " -n 1 -r
-echo    # (optional) move to a new line
-if [[ $REPLY =~ ^[Yy]$ ]]
+read -p "Are you sure?[Y/y] " -n 1 -r
+if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
+    echo
+    exit 1
+fi
+echo
 minikube delete
 minikube start --vm-driver=virtualbox
 
@@ -13,7 +16,7 @@ minikube addons enable metallb
 kubectl apply -f ./yamll/metallb-config.yaml
 kubectl apply -f yamll
 
-DIRS="nginx phpmyadmin" #ftps influxdb telegraf grafana"
+DIRS="mysql wordpress nginx phpmyadmin ftps influxdb telegraf grafana"
 
 for dir in $DIRS
 do
@@ -21,5 +24,3 @@ do
 	kubectl apply -f  ./$dir
         echo -e "\e[32 $dir configured\e[0m"
 done
-
-fi
