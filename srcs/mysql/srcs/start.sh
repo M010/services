@@ -3,6 +3,7 @@
 openrc default
 if [ ! -d "/var/lib/mysql/wordpress" ];
 then
+    echo "CREATING DATABASE WORDPRESS WITH USER ROOT"
     service mariadb setup
     service mariadb start
     mysql < create_wordpress_db.sql

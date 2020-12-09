@@ -1,8 +1,7 @@
 FROM    alpine:latest
 
-RUN     apk add --no-cache  mysql mysql-client openrc 
+RUN     apk add --no-cache mysql mysql-client openrc 
 
-RUN     openrc default
 COPY            ./srcs/start.sh /
 COPY            ./srcs/wp.sql /
 COPY            ./srcs/my.cnf /etc/my.cnf
