@@ -1,3 +1,2 @@
-openrc          default
-service   	php-fpm7	start
+(php-fpm7; killall nginx)&
 nginx -g 'daemon off;'
