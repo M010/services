@@ -23,6 +23,6 @@ DIRS="mysql wordpress nginx phpmyadmin ftps influxdb telegraf grafana"
 
 for dir in $DIRS
 do
-	docker build ./$dir -t my_$dir && echo -e "🐋 \e[33m $dir IMAGE created\n \e[0m"
-	kubectl apply -f  ./$dir       &&  echo -e "😎 \e[33m  $dir deployed to k8s\n \e[0m"
+	docker build ./$dir -t my_$dir && 	echo -e "🐋 \033[32m $dir IMAGE created\n \033[0m"
+	kubectl apply -f  ./$dir       &&  	echo -e "😎 \033[32m  $dir deployed to k8s\n \033[0m"
 done
